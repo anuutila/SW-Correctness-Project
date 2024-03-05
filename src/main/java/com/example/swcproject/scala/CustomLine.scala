@@ -1,3 +1,5 @@
+package com.example.swcproject.scala
+
 
 
 
@@ -61,13 +63,13 @@ end if
  end if
 **/
 
-import com.example.swcproject.scala.Pixel
+import scala.collection.JavaConverters.seqAsJavaListConverter
 import scala.collection.mutable.ListBuffer
 
-object Line {
+final class CustomLine {
 
 
-def plotLineHigh(x0:Int, y0:Int, x1:Int, y1:Int) : List[Pixel] = {
+private def plotLineHigh(x0:Int, y0:Int, x1:Int, y1:Int) : List[Pixel] = {
   var pixels: ListBuffer[Pixel] = ListBuffer[Pixel]()
   var dx = x1 - x0
   val dy = y1 - y0
@@ -99,7 +101,7 @@ def plotLineHigh(x0:Int, y0:Int, x1:Int, y1:Int) : List[Pixel] = {
   return pixels.toList
 }
 
-def plotLineLow(x0: Int, y0: Int, x1: Int, y1: Int): List[Pixel] = {
+private def plotLineLow(x0: Int, y0: Int, x1: Int, y1: Int): List[Pixel] = {
   var pixels: ListBuffer[Pixel] = ListBuffer[Pixel]()
   val dx = x1 - x0
   var dy = y1 - y0
@@ -134,20 +136,20 @@ def plotLineLow(x0: Int, y0: Int, x1: Int, y1: Int): List[Pixel] = {
 
 
 
-def drawLine(x0:Int, y0:Int, x1:Int, y1:Int ) : List[Pixel]  = {
+def drawLine(x0:Int, y0:Int, x1:Int, y1:Int ) : java.util.List[Pixel]  = {
 
   if( (y1-y0).abs < (x1-x0).abs  ) {
     if (x0 > x1){
-        return plotLineLow(x1,y1,x0,y0)
+        return plotLineLow(x1,y1,x0,y0).asJava
       }
-    else return plotLineLow(x0,y0,x1,y1)
+    else return plotLineLow(x0,y0,x1,y1).asJava
   }
   else
   {
     if (y0 > y1) {
-      return plotLineHigh(x1,y1,x0,y0)
+      return plotLineHigh(x1,y1,x0,y0).asJava
     }
-    else return plotLineHigh(x0,y0,x1,y1)
+    else return plotLineHigh(x0,y0,x1,y1).asJava
 
   }
 }
