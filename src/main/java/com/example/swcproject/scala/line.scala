@@ -1,3 +1,5 @@
+package com.example.swcproject.scala
+
 
 // Draw line from Wikipedia:
 /**
@@ -59,3 +61,11 @@ end if
  end if
 
 **/
+import com.example.swcproject.scala.Pixel
+
+def drawLine( x0:Int, y0:Int, x1:Int, y1:Int ) :List[Pixel]  = {
+  var sum: Int = 0
+
+
+  return sum
+}
