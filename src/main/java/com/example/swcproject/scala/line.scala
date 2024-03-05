@@ -63,7 +63,7 @@ end if
 **/
 import com.example.swcproject.scala.Pixel
 
-def drawLine( x0:Int, y0:Int, x1:Int, y1:Int ) :List[Pixel]  = {
+def drawLine( x0:Int, y0:Int, x1:Int, y1:Int ) { //:List[Pixel]  = {
   var sum: Int = 0
 
 
