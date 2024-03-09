@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="mainPane" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../CSS/main-view.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.swcproject.AppController">
+   <children>
+      <HBox>
+         <children>
+            <VBox>
+               <children>
+                  <Canvas fx:id="canvas" height="400.0" width="650.0" />
+                  <Pane id="messagePane" prefHeight="200.0" stylesheets="@../CSS/main-view.css">
+                     <children>
+                        <TextArea fx:id="messageFeed" editable="false" focusTraversable="false" prefHeight="200.0" prefWidth="650.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextArea>
+                     </children></Pane>
+               </children>
+            </VBox>
+            <VBox id="inputPane" prefWidth="350.0" stylesheets="@../CSS/main-view.css">
+               <children>
+                  <TextArea fx:id="commandFeed" editable="false" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="Monospaced Regular" size="18.0" />
+                     </font>
+                  </TextArea>
+                  <TextField fx:id="userInput" onAction="#enterCommand" promptText="Write a command...">
+                     <font>
+                        <Font name="Monospaced Regular" size="14.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
