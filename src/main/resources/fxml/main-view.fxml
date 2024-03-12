@@ -1,45 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane id="mainPane" prefHeight="600.0" prefWidth="1000.0" stylesheets="@../CSS/main-view.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.swcproject.AppController">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" styleClass="root" stylesheets="@../CSS/main-view.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.swcproject.AppController">
    <children>
       <HBox>
          <children>
             <VBox>
                <children>
-                  <Canvas fx:id="canvas" height="400.0" width="650.0" />
-                  <Pane id="messagePane" prefHeight="200.0" stylesheets="@../CSS/main-view.css">
+                  <StackPane>
                      <children>
-                        <TextArea fx:id="messageFeed" editable="false" focusTraversable="false" prefHeight="200.0" prefWidth="650.0">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </TextArea>
-                     </children></Pane>
-               </children>
-            </VBox>
-            <VBox id="inputPane" prefWidth="350.0" stylesheets="@../CSS/main-view.css">
-               <children>
-                  <TextArea fx:id="commandFeed" editable="false" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        <Canvas fx:id="canvas" height="400.0" width="650.0" />
+                        <Pane styleClass="canvasBorderPane" />
+                     </children>
+                  </StackPane>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="25.0" styleClass="messageFeedActionBar">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#clearMessageFeed" style="-fx-background-color: transparent;">
+                           <graphic>
+                              <FontIcon iconColor="#cccccc" iconLiteral="fas-trash-alt" iconSize="11" />
+                           </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <TextArea fx:id="messageFeed" editable="false" focusTraversable="false" prefHeight="175.0" prefWidth="650.0" styleClass="messageFeed" stylesheets="@../CSS/main-view.css" wrapText="true">
                      <font>
-                        <Font name="Monospaced Regular" size="18.0" />
+                        <Font name="Consolas" size="16.0" />
                      </font>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
                   </TextArea>
-                  <TextField fx:id="userInput" onAction="#enterCommand" promptText="Write a command...">
-                     <font>
-                        <Font name="Monospaced Regular" size="14.0" />
-                     </font>
-                  </TextField>
                </children>
             </VBox>
+            <StackPane fx:id="commandPaneStackPane" alignment="TOP_CENTER">
+               <children>
+                  <VBox prefWidth="350.0" styleClass="inputPane" stylesheets="@../CSS/main-view.css">
+                     <children>
+                        <HBox styleClass="commandFeedActionBar">
+                           <children>
+                              <Button fx:id="runButton" mnemonicParsing="false" onAction="#processGraphicsCommands" stylesheets="@../CSS/main-view.css" text="Run">
+                                 <font>
+                                    <Font name="Consolas Bold" size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="8.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <FontIcon iconColor="#f0f2f6" iconLiteral="fas-play" iconSize="13">
+                                       <styleClass>
+                                          <String fx:value="playIcon" />
+                                          <String fx:value="icon-button" />
+                                       </styleClass>
+                                    </FontIcon>
+                                 </graphic>
+                                 <styleClass>
+                                    <String fx:value="runButton" />
+                                    <String fx:value="icon-button" />
+                                 </styleClass>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                              <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetGui" stylesheets="@../CSS/main-view.css" text="Reset">
+                                 <font>
+                                    <Font name="Consolas Bold" size="16.0" />
+                                 </font>
+                                 <styleClass>
+                                    <String fx:value="button" />
+                                    <String fx:value="resetButton" />
+                                 </styleClass>
+                                 <graphic>
+                                    <FontIcon iconColor="#f0f2f6" iconLiteral="fas-trash-alt" iconSize="13" tabSize="11" />
+                                 </graphic>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <TextArea fx:id="commandFeed" editable="false" focusTraversable="false" styleClass="commandFeed" stylesheets="@../CSS/main-view.css" wrapText="true" VBox.vgrow="ALWAYS">
+                           <font>
+                              <Font name="Consolas Bold" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                        </TextArea>
+                        <TextField fx:id="userInput" onAction="#enterCommand" promptText="Write a command..." styleClass="inputField" stylesheets="@../CSS/main-view.css">
+                           <font>
+                              <Font name="Consolas Bold" size="14.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  <ListView fx:id="commandOptions" maxWidth="258.0" style="-fx-background-color: #2b2d30;" styleClass="commandOptions" visible="false" StackPane.alignment="BOTTOM_LEFT">
+                     <StackPane.margin>
+                        <Insets bottom="29.0" left="5.0" />
+                     </StackPane.margin>
+                  </ListView>
+               </children>
+            </StackPane>
          </children>
       </HBox>
    </children>
