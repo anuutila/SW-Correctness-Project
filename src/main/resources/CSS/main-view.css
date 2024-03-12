@@ -1,0 +1,89 @@
+.root {
+    my-background: #2b2d30;
+    my-background2: #393b40;
+    my-background3: #2b2d30;
+    my-background4: #43454a;
+    my-text-color: #f0f2f6;
+}
+
+.canvasBorderPane {
+    -fx-background-color: transparent;
+    -fx-border-color: #7a7a7a;
+    -fx-border-width: 1;
+}
+
+.commandFeed, .messageFeed {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-box-border: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-control-inner-background: my-background;
+    -fx-background-color: transparent;
+    -fx-text-fill: my-text-color;
+}
+
+.messageFeed .scroll-pane, .commandFeed .scroll-pane{
+    -fx-background-color: my-background;
+}
+.messageFeed .scroll-pane .viewport, .commandFeed .scroll-pane .viewport{
+    -fx-background-color: my-background;
+}
+.messageFeed .scroll-pane .content, .commandFeed .scroll-pane .content{
+    -fx-background-color: my-background;
+}
+
+.messageFeed {
+    -fx-border-color: #7a7a7a;
+    -fx-border-width: 0 1 0 0;
+}
+
+.inputField {
+    -fx-background-color: my-background2;
+    -fx-text-fill: my-text-color;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-text-box-border: transparent;
+    -fx-background-insets: 0, 0;
+    -fx-background-radius: 0, 0;
+}
+
+.commandFeedActionBar {
+    -fx-background-color: my-background2;
+    -fx-padding: 8px;
+}
+
+.runButton {
+    -fx-background-color: #57965c;
+    -fx-text-fill: my-text-color;
+}
+
+.resetButton {
+    -fx-background-color: #c94f4f;
+    -fx-text-fill: my-text-color;
+}
+
+.commandOptions {
+    -fx-font-family: "Consolas";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-color: #7a7a7a;
+    -fx-border-width: 1;
+}
+
+.commandOptions .list-cell {
+    -fx-background-color: my-background3;
+    -fx-text-fill: my-text-color;
+}
+.commandOptions .list-cell:hover {
+    -fx-background-color: my-background4;
+}
+
+.messageFeedActionBar {
+    -fx-background-color: my-background2;
+    -fx-border-color: #7a7a7a;
+    -fx-border-width: 0 1 0 0;
+}
+
