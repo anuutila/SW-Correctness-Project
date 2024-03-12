@@ -10,10 +10,10 @@ final class MidpointCircle(){
   // Midpoint Circle Algorithm
   def midpoint_circle (x:Int, y:Int, r:Int) : List[Pixel] = {
     // List of Integers
-    val pixels: ListBuffer[Pixel] = ListBuffer();
+    val pixels: ListBuffer[Pixel] = ListBuffer()
 
-    var x_coordinate:Int = r;
-    var y_coordinate:Int = 0;
+    var x_coordinate:Int = r
+    var y_coordinate:Int = 0
 
     // Only one pixels if radius<0
     if(r<0){
@@ -33,16 +33,17 @@ final class MidpointCircle(){
       }
 
       if(x_coordinate < y_coordinate){
-        break; // TODO check if this works
+        break
       }
 
       // Adding pixels to list
-      pixels.addOne(new Pixel((x_coordinate + x), (y_coordinate + y)))
+      pixels.addOne(new Pixel(x_coordinate + x, y_coordinate + y))
       pixels.addOne(new Pixel(-x_coordinate + x, y_coordinate + y))
       pixels.addOne(new Pixel(x_coordinate + x, -y_coordinate + y))
       pixels.addOne(new Pixel(-x_coordinate + x, -y_coordinate + y))
 
-      print("hello");
+      // Test
+      print("hello")
 
       if (x != y) {
         pixels.addOne(new Pixel(y_coordinate + x, x_coordinate + y))
