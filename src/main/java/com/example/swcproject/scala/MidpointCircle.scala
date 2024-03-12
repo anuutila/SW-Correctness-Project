@@ -44,6 +44,7 @@ final class MidpointCircle(){
 
       // Test
       print("hello")
+      // Little change
 
       if (x != y) {
         pixels.addOne(new Pixel(y_coordinate + x, x_coordinate + y))
