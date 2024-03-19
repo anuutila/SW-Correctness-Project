@@ -1,11 +1,14 @@
 package com.example.swcproject;
 
+// import com.example.swcproject.scala.Pixel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class App extends Application {
     @Override
@@ -19,6 +22,9 @@ public class App extends Application {
         //stage.setMaxHeight(1080);
         //stage.setMaxWidth(1920);
         stage.show();
+
+       // ArrayList<Pixel> lol = new ArrayList<Pixel>();
+
     }
 
     public static void main(String[] args) {
