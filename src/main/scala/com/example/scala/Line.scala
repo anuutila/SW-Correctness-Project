@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:src/main/scala/com/example/scala/CustomLine.scala
 package com.example.swcproject.scala
+========
+package com.example.scala
+>>>>>>>> 36673577df5bde07fd6426c1ee6b01306e7f2245:src/main/scala/com/example/scala/Line.scala
 
 
 
@@ -63,7 +67,12 @@ end if
  end if
 **/
 
+<<<<<<<< HEAD:src/main/scala/com/example/scala/CustomLine.scala
 import scala.collection.JavaConverters.seqAsJavaListConverter
+========
+import com.example.scala.Pixel
+
+>>>>>>>> 36673577df5bde07fd6426c1ee6b01306e7f2245:src/main/scala/com/example/scala/Line.scala
 import scala.collection.mutable.ListBuffer
 
 final class CustomLine {

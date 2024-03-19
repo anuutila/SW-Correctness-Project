@@ -1,6 +1,8 @@
 package com.example.swcproject;
 
 //import com.example.swcproject.scala.Pixel;
+import com.example.scala.Pixel;
+import com.example.scala.Test;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -118,22 +120,22 @@ public class AppController {
     /**
      *  Draw pixels to the canvas in the GUI. Use default color black.
      */
-    /*private void drawPixels(ArrayList<Pixel> pixels) {
+    private void drawPixels(List<Pixel> pixels) {
         PixelWriter pixelWriter = gc.getPixelWriter();
         for (Pixel pixel : pixels) {
             pixelWriter.setColor(pixel.Get_X(), pixel.Get_Y(), Color.BLACK);
         }
     }
 
-    *//**
+    /**
      *  Draw pixels to the canvas in the GUI. Use a specified color.
-     *//*
-    private void drawPixels(ArrayList<Pixel> pixels, Color color) {
+     */
+    private void drawPixels(List<Pixel> pixels, Color color) {
         PixelWriter pixelWriter = gc.getPixelWriter();
         for (Pixel pixel : pixels) {
             pixelWriter.setColor(pixel.Get_X(), pixel.Get_Y(), color);
         }
-    }*/
+    }
 
     /**
      * Draw text on the canvas.
@@ -170,6 +172,12 @@ public class AppController {
         if ("Error".equals(userInput.getText())) {
             enterMessage(new Message("This is a test error message", Message.MESSAGE_TYPE.ERROR));
         }
+
+        // Test Scala integration
+        Test test = new Test();
+        List<Pixel> pixels = test.generatePixels();
+        drawPixels(pixels);
+        enterMessage(new Message(String.format("Random rectangle was drawn between pixels: [%d, %d] and [%d, %d]", pixels.getFirst().Get_X(), pixels.getFirst().Get_Y(), pixels.getLast().Get_X(), pixels.getLast().Get_Y()), Message.MESSAGE_TYPE.INFO));
 
         userInput.clear();
     }
