@@ -1,4 +1,4 @@
-package com.example.swcproject.scala
+package com.example.scala
 
 class Pixel(x_coord:Int, y_coord:Int)
 {

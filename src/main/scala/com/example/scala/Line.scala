@@ -1,3 +1,5 @@
+package com.example.scala
+
 
 
 
@@ -61,7 +63,8 @@ end if
  end if
 **/
 
-import com.example.swcproject.scala.Pixel
+import com.example.scala.Pixel
+
 import scala.collection.mutable.ListBuffer
 
 object Line {
