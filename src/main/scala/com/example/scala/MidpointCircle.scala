@@ -1,6 +1,4 @@
-package com.example.swcproject.scala
-
-import com.example.swcproject.scala.Pixel
+package com.example.scala
 
 import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks.break
