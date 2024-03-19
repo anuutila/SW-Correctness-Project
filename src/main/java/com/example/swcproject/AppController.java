@@ -118,22 +118,12 @@ public class AppController {
     }
 
     /**
-     *  Draw pixels to the canvas in the GUI. Use default color black.
+     *  Draw pixels to the canvas in the GUI.
      */
     private void drawPixels(List<Pixel> pixels) {
         PixelWriter pixelWriter = gc.getPixelWriter();
         for (Pixel pixel : pixels) {
-            pixelWriter.setColor(pixel.Get_X(), pixel.Get_Y(), Color.BLACK);
-        }
-    }
-
-    /**
-     *  Draw pixels to the canvas in the GUI. Use a specified color.
-     */
-    private void drawPixels(List<Pixel> pixels, Color color) {
-        PixelWriter pixelWriter = gc.getPixelWriter();
-        for (Pixel pixel : pixels) {
-            pixelWriter.setColor(pixel.Get_X(), pixel.Get_Y(), color);
+            pixelWriter.setColor(pixel.Get_X(), pixel.Get_Y(), Color.web(pixel.Get_Color()));
         }
     }
 
