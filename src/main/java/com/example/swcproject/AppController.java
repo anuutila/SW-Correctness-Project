@@ -1,6 +1,7 @@
 package com.example.swcproject;
 
 //import com.example.swcproject.scala.Pixel;
+import com.example.scala.MidpointCircle;
 import com.example.scala.Pixel;
 import com.example.scala.Test;
 import javafx.fxml.FXML;
@@ -118,22 +119,12 @@ public class AppController {
     }
 
     /**
-     *  Draw pixels to the canvas in the GUI. Use default color black.
+     *  Draw pixels to the canvas in the GUI.
      */
     private void drawPixels(List<Pixel> pixels) {
         PixelWriter pixelWriter = gc.getPixelWriter();
         for (Pixel pixel : pixels) {
-            pixelWriter.setColor(pixel.Get_X(), pixel.Get_Y(), Color.BLACK);
-        }
-    }
-
-    /**
-     *  Draw pixels to the canvas in the GUI. Use a specified color.
-     */
-    private void drawPixels(List<Pixel> pixels, Color color) {
-        PixelWriter pixelWriter = gc.getPixelWriter();
-        for (Pixel pixel : pixels) {
-            pixelWriter.setColor(pixel.Get_X(), pixel.Get_Y(), color);
+            pixelWriter.setColor(pixel.Get_X(), pixel.Get_Y(), Color.web(pixel.Get_Color()));
         }
     }
 
@@ -174,8 +165,10 @@ public class AppController {
         }
 
         // Test Scala integration
-        Test test = new Test();
-        List<Pixel> pixels = test.generatePixels();
+        //Test test = new Test();
+        MidpointCircle test = new MidpointCircle();
+        //List<Pixel> pixels = test.generatePixels();
+        List<Pixel> pixels = test.midpoint_circle(1,1,11);
         drawPixels(pixels);
         enterMessage(new Message(String.format("Random rectangle was drawn between pixels: [%d, %d] and [%d, %d]", pixels.getFirst().Get_X(), pixels.getFirst().Get_Y(), pixels.getLast().Get_X(), pixels.getLast().Get_Y()), Message.MESSAGE_TYPE.INFO));
 
