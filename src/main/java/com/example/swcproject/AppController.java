@@ -1,6 +1,7 @@
 package com.example.swcproject;
 
 //import com.example.swcproject.scala.Pixel;
+import com.example.scala.MidpointCircle;
 import com.example.scala.Pixel;
 import com.example.scala.Test;
 import javafx.fxml.FXML;
@@ -174,8 +175,10 @@ public class AppController {
         }
 
         // Test Scala integration
-        Test test = new Test();
-        List<Pixel> pixels = test.generatePixels();
+        //Test test = new Test();
+        MidpointCircle test = new MidpointCircle();
+        //List<Pixel> pixels = test.generatePixels();
+        List<Pixel> pixels = test.midpoint_circle(1,1,11);
         drawPixels(pixels);
         enterMessage(new Message(String.format("Random rectangle was drawn between pixels: [%d, %d] and [%d, %d]", pixels.getFirst().Get_X(), pixels.getFirst().Get_Y(), pixels.getLast().Get_X(), pixels.getLast().Get_Y()), Message.MESSAGE_TYPE.INFO));
 
