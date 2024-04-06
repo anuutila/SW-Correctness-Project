@@ -1,5 +1,4 @@
 package com.example.scala
-import scala.collection.JavaConverters.seqAsJavaListConverter
 import com.example.scala.Pixel
 import scala.collection.mutable.ListBuffer
 
@@ -69,8 +68,8 @@ final class CustomLine() {
   }
 
 
-  def drawLine(x0: Int, y0: Int, x1: Int, y1: Int): java.util.List[Pixel] = {
-    return drawLine_priv(x0, y0, x1, y1).asJava
+  def drawLine(x0: Int, y0: Int, x1: Int, y1: Int): List[Pixel] = {
+    return drawLine_priv(x0, y0, x1, y1)
   }
 
   private def drawLine_priv(x0: Int, y0: Int, x1: Int, y1: Int): List[Pixel] = {
@@ -91,7 +90,7 @@ final class CustomLine() {
   }
 
 
-  def drawRect(x0: Int, y0: Int, x1: Int, y1: Int): java.util.List[Pixel] = {
+  def drawRect(x0: Int, y0: Int, x1: Int, y1: Int): List[Pixel] = {
     // defining the 4 corners of the rectangle:
     val corner_bl = new Pixel(x0, y0)
     val corner_tl = new Pixel(x0, y1)
@@ -107,7 +106,7 @@ final class CustomLine() {
     val total_pixels: List[Pixel] = bl_to_br_pixels ::: bl_to_tl_pixels ::: tr_to_tl_pixels ::: tr_to_br_pixels
 
     // Return total amount of pixels.
-    return total_pixels.asJava
+    return total_pixels
   }
 
 }

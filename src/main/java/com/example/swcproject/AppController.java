@@ -1,9 +1,8 @@
 package com.example.swcproject;
 
-//import com.example.swcproject.scala.Pixel;
-import com.example.scala.MidpointCircle;
-import com.example.scala.Pixel;
-import com.example.scala.Test;
+import com.example.scala.*;
+import com.example.scala.Message;
+import com.example.scala.MessageType.*;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,10 +11,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 public class AppController {
 
@@ -31,10 +33,15 @@ public class AppController {
     private ListView<String> commandOptions;
     private GraphicsContext gc;
     private List<String> validCommands;
+    private final int GRID_SPACING = 25;
+    private int canvasHeight;
+    private int canvasWidth;
 
     @FXML
     private void initialize() {
         gc = canvas.getGraphicsContext2D();
+        canvasHeight = (int) Math.floor(canvas.getHeight());
+        canvasWidth = (int) Math.floor(canvas.getWidth());
         drawGrid();
         addTextFieldOptions();
         validCommands = Arrays.asList(
@@ -52,9 +59,6 @@ public class AppController {
      * Draw a grid for the canvas.
      */
     private void drawGrid() {
-        int canvasHeight = (int) Math.floor(canvas.getHeight());
-        int canvasWidth = (int) Math.floor(canvas.getWidth());
-        int GRID_SPACING = 25;
         int rows = canvasHeight / GRID_SPACING;
         int columns = canvasWidth / GRID_SPACING;
 
@@ -71,6 +75,12 @@ public class AppController {
         for (int i = 0; i < columns; i++) {
             double x = i * GRID_SPACING;
             gc.strokeLine(x, 0, x, canvasHeight);
+
+            // Show the value of every 5th line
+            if (i % 5 == 0 && i != 0) {
+                drawText(String.valueOf(i), 10, i*25-5, canvasHeight-2);
+                drawText(String.valueOf(i), 10, 1, canvasHeight-i*25+4);
+            }
         }
     }
 
@@ -131,7 +141,8 @@ public class AppController {
     /**
      * Draw text on the canvas.
      */
-    private void drawText(String text, int x_coord, int y_coord) {
+    private void drawText(String text, int size, int x_coord, int y_coord) {
+        gc.setFont(new Font(size));
         gc.fillText(text, x_coord, y_coord);
     }
 
@@ -144,34 +155,13 @@ public class AppController {
         String command = userInput.getText();
         commandFeed.appendText(command + "\n");
 
-
-        // Test drawing a rectangle
-        PixelWriter pixelWriter = gc.getPixelWriter();
-        for (int i=200; i<300; i++) {
-            for (int j=100; j<200; j++) {
-                pixelWriter.setColor(i, j, Color.BLACK);
-            }
-        }
-
-        //Test drawing text
-        drawText("Testi", 50, 50);
-
         // TESTS
         if ("Warn".equals(userInput.getText())) {
-            enterMessage(new Message("This is a test warning message", Message.MESSAGE_TYPE.WARNING));
+            enterMessage(new Message("This is a test warning message", MessageType.WARNING()));
         }
         if ("Error".equals(userInput.getText())) {
-            enterMessage(new Message("This is a test error message", Message.MESSAGE_TYPE.ERROR));
+            enterMessage(new Message("This is a test error message", MessageType.ERROR()));
         }
-
-        // Test Scala integration
-        //Test test = new Test();
-        MidpointCircle test = new MidpointCircle();
-        //List<Pixel> pixels = test.generatePixels();
-        List<Pixel> pixels = test.midpoint_circle(1,1,11);
-        drawPixels(pixels);
-        enterMessage(new Message(String.format("Random rectangle was drawn between pixels: [%d, %d] and [%d, %d]", pixels.getFirst().Get_X(), pixels.getFirst().Get_Y(), pixels.getLast().Get_X(), pixels.getLast().Get_Y()), Message.MESSAGE_TYPE.INFO));
-
         userInput.clear();
     }
 
@@ -180,7 +170,20 @@ public class AppController {
      */
     @FXML
     private void processGraphicsCommands() {
-        enterMessage(new Message("Commands sent to Scala interpreter.", Message.MESSAGE_TYPE.INFO));
+        resetCanvas();
+        drawGrid();
+        enterMessage(new Message("Commands sent to Scala interpreter.", MessageType.INFO()));
+
+        GraphicsLanguageInterpreter gli = new GraphicsLanguageInterpreter(
+                commandFeed.getText(),
+                new CanvasInformation(GRID_SPACING, canvasHeight)
+        );
+
+        List<CommandResult> response = gli.interpretProgram();
+        for (CommandResult result : response) {
+            enterMessage(result.message());
+            drawPixels(result.pixels());
+        }
     }
 
     /**
@@ -195,11 +198,18 @@ public class AppController {
      */
     @FXML
     private void resetGui() {
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        resetCanvas();
         commandFeed.clear();
         clearMessageFeed();
         drawGrid();
-        enterMessage(new Message("Drawing area and command feed cleared.", Message.MESSAGE_TYPE.INFO));
+        enterMessage(new Message("Canvas and graphics language editor cleared.", MessageType.INFO()));
+    }
+
+    /**
+     * Empty the canvas.
+     */
+    private void resetCanvas() {
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
     /**

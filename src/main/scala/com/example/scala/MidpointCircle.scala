@@ -2,12 +2,11 @@ package com.example.scala
 
 import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks._
-import scala.jdk.CollectionConverters._
 
 class MidpointCircle(){
 
   // Midpoint Circle Algorithm
-  def midpoint_circle (x:Int, y:Int, r:Int) : java.util.List[Pixel] = {
+  def midpoint_circle (x:Int, y:Int, r:Int) : ListBuffer[Pixel] = {
     // List of Integers
     //val pixels: ListBuffer[Pixel] = ListBuffer()
     val pixels = ListBuffer.empty[Pixel]
@@ -70,6 +69,6 @@ class MidpointCircle(){
       }
 
     }
-      return pixels.toList.asJava
+      return pixels
     }
 }

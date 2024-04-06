@@ -96,7 +96,7 @@
                               </Button>
                            </children>
                         </HBox>
-                        <TextArea fx:id="commandFeed" editable="false" focusTraversable="false" styleClass="commandFeed" stylesheets="@../CSS/main-view.css" wrapText="true" VBox.vgrow="ALWAYS">
+                        <TextArea fx:id="commandFeed" focusTraversable="false" styleClass="commandFeed" stylesheets="@../CSS/main-view.css" wrapText="true" VBox.vgrow="ALWAYS">
                            <font>
                               <Font name="Consolas Bold" size="18.0" />
                            </font>
