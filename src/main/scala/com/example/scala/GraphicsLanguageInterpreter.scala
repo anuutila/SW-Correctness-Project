@@ -42,6 +42,8 @@ class GraphicsLanguageInterpreter(graphicsProgram: String, canvasInfo: CanvasInf
   private val fillCirclePattern: Regex = """\(FILL (#(?:[0-9a-fA-F]{3}){1,2}) \(CIRCLE \((\d+) (\d+)\) (\d+)\)\)""".r
   // Other patterns...
 
+
+
   // Parse a single command string and return the corresponding Command object
   private def parseCommand(commandString: String): Option[Command] = {
     commandString.trim match {
