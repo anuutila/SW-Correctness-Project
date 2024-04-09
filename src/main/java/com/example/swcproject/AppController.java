@@ -183,7 +183,14 @@ public class AppController {
         List<CommandResult> response = gli.interpretProgram();
         for (CommandResult result : response) {
             enterMessage(result.message());
-            drawPixels(result.pixels());
+            if (result.commandType() == CommandType.TEXT_AT()) {
+                int x = result.pixels().getFirst().Get_X();
+                int y = result.pixels().getFirst().Get_Y();
+                drawText(result.text().get(), 14, x, y);
+            } else {
+                drawPixels(result.pixels());
+            }
+
         }
     }
 
