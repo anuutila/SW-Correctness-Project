@@ -52,8 +52,8 @@ public class AppController {
                 "(BOUNDING-BOX (x1 y1) (x2 y2))",
                 "(DRAW c g1 g2 ... )",
                 "(FILL c g)",
-                "(FILL c (RECTANGLE (x1 y1) (x2 y2)))"
-
+                "(FILL c (RECTANGLE (x1 y1) (x2 y2)))",
+                "(FILL c (CIRCLE (x1 y1) r))"
         );
     }
 
@@ -184,7 +184,14 @@ public class AppController {
         List<CommandResult> response = gli.interpretProgram();
         for (CommandResult result : response) {
             enterMessage(result.message());
-            drawPixels(result.pixels());
+            if (result.commandType() == CommandType.TEXT_AT()) {
+                int x = result.pixels().getFirst().Get_X();
+                int y = result.pixels().getFirst().Get_Y();
+                drawText(result.text().get(), 14, x, y);
+            } else {
+                drawPixels(result.pixels());
+            }
+
         }
     }
 

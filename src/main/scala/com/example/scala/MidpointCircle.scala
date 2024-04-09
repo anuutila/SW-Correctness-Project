@@ -8,7 +8,6 @@ class MidpointCircle(){
   // Midpoint Circle Algorithm
   def midpoint_circle (x:Int, y:Int, r:Int) : ListBuffer[Pixel] = {
     // List of Integers
-    //val pixels: ListBuffer[Pixel] = ListBuffer()
     val pixels = ListBuffer.empty[Pixel]
 
     var x_coordinate: Int = r
@@ -46,24 +45,12 @@ class MidpointCircle(){
         pixels += new Pixel(-x_coordinate + x, y_coordinate + y)
         pixels += new Pixel(x_coordinate + x, -y_coordinate + y)
         pixels += new Pixel(-x_coordinate + x, -y_coordinate + y)
-        //pixels.addOne(new Pixel(x_coordinate + x, y_coordinate + y))
-        //pixels.addOne(new Pixel(-x_coordinate + x, y_coordinate + y))
-        //pixels.addOne(new Pixel(x_coordinate + x, -y_coordinate + y))
-        //pixels.addOne(new Pixel(-x_coordinate + x, -y_coordinate + y))
-
-        // Test
-        //print("hello")
-        // Little change
 
         if (x_coordinate != y_coordinate) {
           pixels += new Pixel(y_coordinate + x, x_coordinate + y)
           pixels += new Pixel(-y_coordinate + x, x_coordinate + y)
           pixels += new Pixel(y_coordinate + x, -x_coordinate + y)
           pixels += new Pixel(-y_coordinate + x, -x_coordinate + y)
-          //pixels.addOne(new Pixel(y_coordinate + x, x_coordinate + y))
-          //pixels.addOne(new Pixel(-y_coordinate + x, x_coordinate + y))
-          //pixels.addOne(new Pixel(y_coordinate + x, -x_coordinate + y))
-          //pixels.addOne(new Pixel(-y_coordinate + x, -x_coordinate + y))
         }
 
       }
@@ -71,4 +58,27 @@ class MidpointCircle(){
     }
       return pixels
     }
+
+  def fill_circle(x_center:Int, y_center:Int, r:Int, colour: String): ListBuffer[Pixel] = {
+    val pixels = ListBuffer.empty[Pixel]
+
+    var x: Int = x_center - r
+    var y: Int = y_center - r
+
+    for( x <- 1 to x_center){
+      for( y <- 1 to y_center){
+        if((x-x_center)*(x-x_center)+(y - y_center)*(y - y_center) <= r*r){
+          var xSym = x_center - (x - x_center)
+          var ySym = y_center - (y - y_center)
+
+          pixels += new Pixel(x,y,colour)
+          pixels += new Pixel(x,ySym,colour)
+          pixels += new Pixel(xSym,y,colour)
+          pixels += new Pixel(xSym,ySym,colour)
+        }
+      }
+    }
+
+    return pixels
+  }
 }
