@@ -7,11 +7,17 @@ import scala.util.matching.Regex
 import scala.jdk.CollectionConverters._
 import com.example.scala
 
+import _root_.scala.collection.mutable
+
 class GraphicsLanguageInterpreter(graphicsProgram: String, canvasInfo: CanvasInformation) {
 
   // Canvas properties
   private val gs: Int = canvasInfo.gridSpacing
   private val ch: Int = canvasInfo.canvasHeight
+
+  // Bounding box pixel values:
+  private var bb_lower_left = new Pixel(0,ch)
+  private var bb_upper_right = new Pixel(10*gs, ch-(10*gs))
 
   def interpretProgram(): java.util.List[CommandResult] = {
     // Split the graphicsCommands string into individual lines
@@ -21,8 +27,24 @@ class GraphicsLanguageInterpreter(graphicsProgram: String, canvasInfo: CanvasInf
     for (line <- graphicsCommands) {
       parseCommand(line.trim) match {
         case Some(command) =>
+          // Get result from original command:
           val result = command.execute()
+
+          // NOTE: This is a bit ugly with the conversions. Could be be changed slightly
+          if(result.commandType == CommandType.BOUNDING_BOX) {
+            // List only has two pixels. Lower left first and top right after.
+            val new_bb_values = result.pixels.asScala
+            bb_lower_left = new_bb_values(0)
+            bb_upper_right = new_bb_values(1)
+          }
+          else {
+          // Filter result based on Bounding box values:
+          val pixels_scala = result.pixels.asScala
+          result.pixels = filterBoundingBox(pixels_scala).asJava
+
+
           results += result
+          }
         case None =>
           // If the command is invalid, add an empty list of pixels and an error message to the results
           val errorMessage = new Message(s"Invalid command: $line", MessageType.ERROR)
@@ -40,6 +62,7 @@ class GraphicsLanguageInterpreter(graphicsProgram: String, canvasInfo: CanvasInf
   private val textAtPattern: Regex = """\(TEXT-AT \((\d+) (\d+)\) (.+)\)""".r
   private val fillRectanglePattern: Regex = """\(FILL (#(?:[0-9a-fA-F]{3}){1,2}) \(RECTANGLE \((\d+) (\d+)\) \((\d+) (\d+)\)\)\)""".r
   private val fillCirclePattern: Regex = """\(FILL (#(?:[0-9a-fA-F]{3}){1,2}) \(CIRCLE \((\d+) (\d+)\) (\d+)\)\)""".r
+  private val boundingBoxPattern: Regex = """\(BOUNDING-BOX \((\d+) (\d+)\) \((\d+) (\d+)\)\)""".r
   // Other patterns...
 
 
@@ -54,10 +77,21 @@ class GraphicsLanguageInterpreter(graphicsProgram: String, canvasInfo: CanvasInf
       case fillCirclePattern(c,x,y,r) => Some(FillCircleCommand(x.toInt, y.toInt, r.toInt, c, gs, ch))
       case textAtPattern(x, y, text) => Some(TextAtCommand(x.toInt, y.toInt, text, gs, ch))
       case fillRectanglePattern(c, x0, y0, x1, y1) => Some(FillRectangleCommand(c, x0.toInt, y0.toInt, x1.toInt, y1.toInt, gs, ch))
+      case boundingBoxPattern(x0,y0,x1,y1) => Some(BoundingBoxCommand(x0.toInt, y0.toInt, x1.toInt, y1.toInt, gs, ch))
       // Other cases...
       case _ => None // Return None if the command string doesn't match any pattern
     }
   }
+
+  // Filter based on bounding box values:
+   private def filterBoundingBox(commandResult: mutable.Buffer[Pixel]): List[Pixel] = {
+     // Because of how the coordinates work. The Y conditions are inverted.
+    val filtered_result = commandResult.filter(p => (bb_lower_left.Get_Y() > p.Get_Y() &&  p.Get_Y() > bb_upper_right.Get_Y() && bb_lower_left.Get_X() < p.Get_X() &&  p.Get_X() < bb_upper_right.Get_X() )   )
+
+    return filtered_result.toList
+  }
+
+
 }
 
 case class CanvasInformation(gridSpacing: Int, canvasHeight: Int)
@@ -67,7 +101,7 @@ sealed trait Command {
 }
 
 case class CommandResult(
-                          pixels: java.util.List[Pixel],
+                          var pixels: java.util.List[Pixel],
                           message: Message,
                           commandType: CommandType,
                           text: Option[String] // For the TextAt command
@@ -75,8 +109,35 @@ case class CommandResult(
 
 object CommandType extends Enumeration {
   type CommandType = Value
-  val LINE, RECTANGLE, CIRCLE, TEXT_AT, FILL, INVALID = Value
+  val BOUNDING_BOX, LINE, RECTANGLE, CIRCLE, TEXT_AT, FILL, INVALID = Value
 }
+
+
+case class BoundingBoxCommand(x0: Int, y0: Int, x1: Int, y1: Int, gs: Int, ch: Int) extends Command {
+  override def execute(): CommandResult = {
+
+    // Find the biggest and smallest values of x and y:
+    val smallest_x = if(x0 < x1) x0 else x1
+    val biggest_x = if (x0 > x1) x0 else x1
+
+    val smallest_y = if(y0 < y1) y0 else y1
+    val biggest_y = if (y0 > y1) y0 else y1
+
+
+    // gs is canvas grids pacing and ch is canvas width
+    // They are needed to adjust the coordinate values to the scale and orientation of the javafx canvas
+    val pixels = List(new Pixel(smallest_x*gs,ch-(smallest_y*gs)), new Pixel(biggest_x*gs,ch-(biggest_y*gs)))
+
+    return CommandResult(
+      pixels.asJava,
+      new Message(s"Bounding box set from [$x0, $y0] to [$x1, $y1]", MessageType.INFO),
+      CommandType.BOUNDING_BOX,
+      None
+    )
+  }
+}
+
+
 
 case class LineCommand(x0: Int, y0: Int, x1: Int, y1: Int, gs: Int, ch: Int) extends Command {
   override def execute(): CommandResult = {
