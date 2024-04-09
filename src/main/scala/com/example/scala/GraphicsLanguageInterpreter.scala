@@ -17,7 +17,7 @@ class GraphicsLanguageInterpreter(graphicsProgram: String, canvasInfo: CanvasInf
 
   // Bounding box pixel values:
   private var bb_lower_left = new Pixel(0,ch)
-  private var bb_upper_right = new Pixel(10*gs, ch-(10*gs))
+  private var bb_upper_right = new Pixel(26*gs, ch-(16*gs))
 
   def interpretProgram(): java.util.List[CommandResult] = {
     // Split the graphicsCommands string into individual lines
