@@ -34,6 +34,10 @@ class GraphicsLanguageInterpreter(graphicsProgram: String, canvasInfo: CanvasInf
   private val linePattern: Regex = """\(LINE \((\d+) (\d+)\) \((\d+) (\d+)\)\)""".r
   private val rectanglePattern: Regex = """\(RECTANGLE \((\d+) (\d+)\) \((\d+) (\d+)\)\)""".r
   private val circlePattern: Regex = """\(CIRCLE \((\d+) (\d+)\) (\d+)\)""".r
+  private val fillRectanglePattern: Regex = """\(FILL (#(?:[0-9a-fA-F]{3}){1,2}) \(RECTANGLE \((\d+) (\d+)\) \((\d+) (\d+)\)\)\)""".r
+
+
+
   // Other patterns...
 
   // Parse a single command string and return the corresponding Command object
@@ -43,6 +47,7 @@ class GraphicsLanguageInterpreter(graphicsProgram: String, canvasInfo: CanvasInf
       case linePattern(x0, y0, x1, y1) => Some(LineCommand(x0.toInt, y0.toInt, x1.toInt, y1.toInt, gs, ch))
       case rectanglePattern(x0, y0, x1, y1) => Some(RectangleCommand(x0.toInt, y0.toInt, x1.toInt, y1.toInt, gs, ch))
       case circlePattern(x, y, r) => Some(CircleCommand(x.toInt, y.toInt, r.toInt, gs, ch))
+      case fillRectanglePattern(c, x0, y0, x1, y1) => Some(FillRectangleCommand(c, x0.toInt, y0.toInt, x1.toInt, y1.toInt, gs, ch))
       // Other cases...
       case _ => None // Return None if the command string doesn't match any pattern
     }
@@ -81,5 +86,14 @@ case class CircleCommand(x: Int, y: Int, r: Int, gs: Int, ch: Int) extends Comma
     // They are needed to adjust the coordinate values to the scale and orientation of the javafx canvas
     val pixels = new MidpointCircle().midpoint_circle(x*gs, ch-(y*gs), r*gs)
     return CommandResult(pixels.asJava, new Message("Circle drawn at [" + x + ", " + y + "] with radius " + r, MessageType.INFO))
+  }
+}
+
+case class FillRectangleCommand(colour:String, x0: Int, y0: Int, x1: Int, y1: Int, gs: Int, ch: Int) extends Command {
+  override def execute(): CommandResult = {
+    // gs is canvas grids pacing and ch is canvas width
+    // They are needed to adjust the coordinate values to the scale and orientation of the javafx canvas
+    val pixels = new CustomLine().fillRect(x0*gs, ch-(y0*gs), x1*gs, ch-(y1*gs), colour)
+    return CommandResult(pixels.asJava, new Message(s"Rectangle filled between [$x0, $y0] and [$x1, $y1]", MessageType.INFO))
   }
 }

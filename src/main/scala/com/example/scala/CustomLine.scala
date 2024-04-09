@@ -109,4 +109,39 @@ final class CustomLine() {
     return total_pixels
   }
 
+
+
+
+  // Command to create a rectangle and fill it with pixels of colour
+  def fillRect(x0: Int, y0: Int, x1: Int, y1: Int, colour: String):  List[Pixel]  = {
+
+    var pixels: ListBuffer[Pixel] = ListBuffer[Pixel]()
+
+    // If the x's or y's are equal then it is just a line and can't be filled.
+    if(x0 == x1 | y0 == y1){
+      return pixels.toList
+    }
+
+    // Find the biggest and smallest values of x and y:
+    val least_x = if(x0 < x1) x0 else x1
+    val biggest_x = if (x0 > x1) x0 else x1
+
+    val least_y = if(y0 < y1) y0 else y1
+    val biggest_y = if (y0 > y1) y0 else y1
+
+
+
+    // Foreach x value in the range:
+    for( new_x <- least_x to biggest_x)
+    {
+      // Create a pixel of every y-value in the range:
+      for( new_y <- least_y to biggest_y){
+        pixels += new Pixel(new_x, new_y, colour)
+
+      }
+    }
+
+    return pixels.toList
+  }
+
 }
