@@ -70,7 +70,7 @@ case class CommandResult(
 
 object CommandType extends Enumeration {
   type CommandType = Value
-  val LINE, RECTANGLE, CIRCLE, TEXT_AT, INVALID = Value
+  val LINE, RECTANGLE, CIRCLE, TEXT_AT, FILL, INVALID = Value
 }
 
 case class LineCommand(x0: Int, y0: Int, x1: Int, y1: Int, gs: Int, ch: Int) extends Command {
@@ -135,6 +135,9 @@ case class FillCircleCommand(x: Int, y: Int, r: Int, colour: String, gs: Int, ch
 
     // Fill Circle
     val pixels = new MidpointCircle().fill_circle(x*gs, ch-(y*gs), r*gs, colour)
-    return CommandResult(pixels.asJava, new Message("Fill circle drawn at [" + x + ", " + y + "] with radius " + r, MessageType.INFO))
+    return CommandResult(pixels.asJava, new Message("Fill circle drawn at [" + x + ", " + y + "] with radius " + r, MessageType.INFO),
+      CommandType.FILL,
+      None
+    )
   }
 }
