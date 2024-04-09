@@ -51,7 +51,8 @@ public class AppController {
                 "(TEXT-AT (x1 y1) t)",
                 "(BOUNDING-BOX (x1 y1) (x2 y2))",
                 "(DRAW c g1 g2 ... )",
-                "(FILL c g)"
+                "(FILL c g)",
+                "(FILL c (CIRCLE (x1 y1) r))"
         );
     }
 

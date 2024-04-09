@@ -35,6 +35,7 @@ class GraphicsLanguageInterpreter(graphicsProgram: String, canvasInfo: CanvasInf
   private val rectanglePattern: Regex = """\(RECTANGLE \((\d+) (\d+)\) \((\d+) (\d+)\)\)""".r
   private val circlePattern: Regex = """\(CIRCLE \((\d+) (\d+)\) (\d+)\)""".r
   // Other patterns...
+  private val fillCirclePattern: Regex = """\(FILL (#(?:[0-9a-fA-F]{3}){1,2}) \(CIRCLE \((\d+) (\d+)\) (\d+)\)\)""".r
 
   // Parse a single command string and return the corresponding Command object
   private def parseCommand(commandString: String): Option[Command] = {
@@ -43,6 +44,7 @@ class GraphicsLanguageInterpreter(graphicsProgram: String, canvasInfo: CanvasInf
       case linePattern(x0, y0, x1, y1) => Some(LineCommand(x0.toInt, y0.toInt, x1.toInt, y1.toInt, gs, ch))
       case rectanglePattern(x0, y0, x1, y1) => Some(RectangleCommand(x0.toInt, y0.toInt, x1.toInt, y1.toInt, gs, ch))
       case circlePattern(x, y, r) => Some(CircleCommand(x.toInt, y.toInt, r.toInt, gs, ch))
+      case fillCirclePattern(c,x,y,r) => Some(FillCircleCommand(x.toInt, y.toInt, r.toInt, c, gs, ch))
       // Other cases...
       case _ => None // Return None if the command string doesn't match any pattern
     }
@@ -81,5 +83,15 @@ case class CircleCommand(x: Int, y: Int, r: Int, gs: Int, ch: Int) extends Comma
     // They are needed to adjust the coordinate values to the scale and orientation of the javafx canvas
     val pixels = new MidpointCircle().midpoint_circle(x*gs, ch-(y*gs), r*gs)
     return CommandResult(pixels.asJava, new Message("Circle drawn at [" + x + ", " + y + "] with radius " + r, MessageType.INFO))
+  }
+}
+
+case class FillCircleCommand(x: Int, y: Int, r: Int, colour: String, gs: Int, ch: Int) extends Command {
+  override def execute(): CommandResult = {
+    // Call Circle Command - if we want black border
+
+    // Fill Circle
+    val pixels = new MidpointCircle().fill_circle(x*gs, ch-(y*gs), r*gs, colour)
+    return CommandResult(pixels.asJava, new Message("Fill circle drawn at [" + x + ", " + y + "] with radius " + r, MessageType.INFO))
   }
 }
