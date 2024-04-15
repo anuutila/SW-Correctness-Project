@@ -36,7 +36,11 @@ public class AppController {
     private final int GRID_SPACING = 25;
     private int canvasHeight;
     private int canvasWidth;
+    private final String DEFAULT_TEXT_COLOR = "#000000";
 
+    /**
+     * Initialize the GUI
+     */
     @FXML
     private void initialize() {
         gc = canvas.getGraphicsContext2D();
@@ -141,10 +145,31 @@ public class AppController {
     }
 
     /**
+     *  Draw pixels in certain color to the canvas in the GUI.
+     */
+    private void drawPixels(List<Pixel> pixels , String color) {
+        PixelWriter pixelWriter = gc.getPixelWriter();
+        for (Pixel pixel : pixels) {
+            pixelWriter.setColor(pixel.Get_X(), pixel.Get_Y(), Color.web(color));
+        }
+    }
+
+    /**
      * Draw text on the canvas.
      */
     private void drawText(String text, int size, int x_coord, int y_coord) {
         gc.setFont(new Font(size));
+        gc.setFill(Color.web(DEFAULT_TEXT_COLOR));
+        gc.fillText(text, x_coord, y_coord);
+        gc.fillText(text, x_coord, y_coord);
+    }
+
+    /**
+     * Draw colored text on the canvas.
+     */
+    private void drawText(String text, int size, int x_coord, int y_coord, String color) {
+        gc.setFont(new Font(size));
+        gc.setFill(Color.web(color));
         gc.fillText(text, x_coord, y_coord);
     }
 
@@ -156,19 +181,12 @@ public class AppController {
     private void enterCommand() {
         String command = userInput.getText();
         commandFeed.appendText(command + "\n");
-
-        // TESTS
-        if ("Warn".equals(userInput.getText())) {
-            enterMessage(new Message("This is a test warning message", MessageType.WARNING()));
-        }
-        if ("Error".equals(userInput.getText())) {
-            enterMessage(new Message("This is a test error message", MessageType.ERROR()));
-        }
         userInput.clear();
     }
 
     /**
      * Send the program with all the entered commands to the Scala interpreter.
+     * Draw pixels to the canvas based on the results received from the Scala interpreter.
      */
     @FXML
     private void processGraphicsCommands() {
@@ -187,7 +205,9 @@ public class AppController {
             if (result.commandType() == CommandType.TEXT_AT()) {
                 int x = result.pixels().getFirst().Get_X();
                 int y = result.pixels().getFirst().Get_Y();
-                drawText(result.text().get(), 14, x, y);
+                drawText(result.text().get(), 14, x, y, result.color());
+            } else if (result.color() != null) {
+                drawPixels(result.pixels(), result.color());
             } else {
                 drawPixels(result.pixels());
             }
@@ -203,7 +223,7 @@ public class AppController {
     }
 
     /**
-     * Clear the drawing area and the command feed.
+     * Clear the canvas and the command feed.
      */
     @FXML
     private void resetGui() {
@@ -215,14 +235,14 @@ public class AppController {
     }
 
     /**
-     * Empty the canvas.
+     * Clear the canvas.
      */
     private void resetCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
     /**
-     * Empty the message feed.
+     * Clear the message feed.
      */
     @FXML
     private void clearMessageFeed() {
