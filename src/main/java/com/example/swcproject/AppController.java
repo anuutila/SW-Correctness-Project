@@ -193,7 +193,7 @@ public class AppController {
         resetCanvas();
         drawGrid();
         if (!messageFeed.getText().isEmpty()) {
-            messageFeed.appendText("------------------------------------------\n\n");
+            messageFeed.appendText("\n------------------------------------------\n\n");
         }
         enterMessage(new Message("Commands sent to Scala interpreter.", MessageType.INFO()));
 
@@ -209,7 +209,11 @@ public class AppController {
                 Pixel textStart = result.pixels().getFirst();
                 int x = textStart.Get_X();
                 int y = textStart.Get_Y();
-                drawText(result.text().get(), 14, x, y, result.color());
+                if (result.color() == null) {
+                    drawText(result.text().get(), 14, x, y);
+                } else {
+                    drawText(result.text().get(), 14, x, y, result.color());
+                }
             } else if (result.color() != null) {
                 drawPixels(result.pixels(), result.color());
             } else {
